@@ -42,7 +42,12 @@ class AccountListViewController: UITableViewController {
     
     @IBAction func add(sender: AnyObject) {
         do {
-            try OAuth2Authorizer.sharedInstance.challengeWithAllScopes()
+            let authorizationURL = try OAuth2Authorizer.sharedInstance.challengeWithAllScopes()
+            if #available (iOS 10.0, *) {
+                UIApplication.shared.open(authorizationURL, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(authorizationURL)
+            }
         } catch {
         }
     }

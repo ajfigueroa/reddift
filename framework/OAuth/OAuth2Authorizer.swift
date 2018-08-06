@@ -29,9 +29,9 @@ public class OAuth2Authorizer {
     /**
     Open OAuth2 page to try to authorize with all scopes in Safari.app.
     */
-    public func challengeWithAllScopes() throws {
+    public func challengeWithAllScopes() throws -> URL {
         do {
-            try self.challengeWithScopes(["identity", "edit", "flair", "history", "modconfig", "modflair", "modlog", "modposts", "modwiki", "mysubreddits", "privatemessages", "read", "report", "save", "submit", "subscribe", "vote", "wikiedit", "wikiread"])
+            return try self.challengeWithScopes(["identity", "edit", "flair", "history", "modconfig", "modflair", "modlog", "modposts", "modwiki", "mysubreddits", "privatemessages", "read", "report", "save", "submit", "subscribe", "vote", "wikiedit", "wikiread"])
         } catch {
             throw error
         }
@@ -42,7 +42,7 @@ public class OAuth2Authorizer {
     
     - parameter scopes: Scope you want to get authorizing. You can check all scopes at https://www.reddit.com/dev/api/oauth.
     */
-    public func challengeWithScopes(_ scopes: [String]) throws {
+    public func challengeWithScopes(_ scopes: [String]) throws -> URL {
         let commaSeparatedScopeString = scopes.joined(separator: ",")
         
         let length = 64
@@ -54,15 +54,7 @@ public class OAuth2Authorizer {
             self.state = data.base64EncodedString(options: .endLineWithLineFeed)
             guard let authorizationURL = URL(string: "https://www.reddit.com/api/v1/authorize.compact?client_id=" + Config.sharedInstance.clientID + "&response_type=code&state=" + self.state + "&redirect_uri=" + Config.sharedInstance.redirectURI + "&duration=permanent&scope=" + commaSeparatedScopeString)
                 else { throw ReddiftError.canNotCreateURLRequestForOAuth2Page as NSError }
-#if os(iOS)
-                if #available (iOS 10.0, *) {
-                    UIApplication.shared.open(authorizationURL, options: [:], completionHandler: nil)
-                } else {
-                    UIApplication.shared.openURL(authorizationURL)
-                }
-#elseif os(macOS)
-                NSWorkspace.shared.open(authorizationURL)
-#endif
+                return authorizationURL
         } else {
             throw ReddiftError.canNotAllocateDataToCreateURLForOAuth2 as NSError
         }
