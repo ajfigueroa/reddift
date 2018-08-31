@@ -21,6 +21,11 @@ private func convertObjectToEscapedURLString(_ object: AnyObject?) -> String {
     }
 }
 
+/// Protocol to uniquely represent Links
+public protocol LinkIdentifiable {
+    var identifier: String { get }
+}
+
 /**
 Link content.
 */
@@ -367,5 +372,12 @@ public struct Link: Thing, Created, Votable {
         reportReasons = []
         modReports = []
         secureMediaEmbed = nil
+    }
+}
+
+// MARK: LinkIdentifiable
+extension Link: LinkIdentifiable {
+    public var identifier: String {
+        return id
     }
 }

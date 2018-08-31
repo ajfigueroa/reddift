@@ -46,7 +46,7 @@ extension Session {
     - returns: Data task which requests search to reddit.com.
      */
     @discardableResult
-    public func getArticles(_ link: Link, sort: CommentSort, comments: [String]? = nil, depth: Int? = nil, limit: Int? = nil, context: Int? = nil, completion: @escaping (Result<(Listing, Listing)>) -> Void) throws -> URLSessionDataTask {
+    public func getArticles(_ link: LinkIdentifiable, sort: CommentSort, comments: [String]? = nil, depth: Int? = nil, limit: Int? = nil, context: Int? = nil, completion: @escaping (Result<(Listing, Listing)>) -> Void) throws -> URLSessionDataTask {
         var parameter = ["sort": sort.type, "showmore": "True"]
         if let depth = depth {
             parameter["depth"] = "\(depth)"
@@ -61,7 +61,8 @@ extension Session {
         if let context = context {
 			parameter["context"] = String(context)
 		}
-        guard let request = URLRequest.requestForOAuth(with: baseURL, path: "/comments/" + link.id + ".json", parameter: parameter, method: "GET", token: token)
+        let linkId = link.identifier
+        guard let request = URLRequest.requestForOAuth(with: baseURL, path: "/comments/" + linkId + ".json", parameter: parameter, method: "GET", token: token)
             else { throw ReddiftError.canNotCreateURLRequest as NSError }
         let closure = {(data: Data?, response: URLResponse?, error: NSError?) -> Result<(Listing, Listing)> in
             
