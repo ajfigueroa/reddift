@@ -98,6 +98,8 @@ extension Session {
                 return try getNewOrHotList(paginator, subreddit: subreddit, type: "new", limit: limit, completion: completion)
             case .hot:
                 return try getNewOrHotList(paginator, subreddit: subreddit, type: "hot", limit: limit, completion: completion)
+            case .best:
+                return try getList(paginator, subreddit: subreddit, privateSortType: .best, timeFilterWithin: timeFilterWithin, limit: limit, completion: completion)
             }
         } catch { throw error }
     }
