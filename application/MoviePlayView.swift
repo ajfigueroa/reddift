@@ -121,7 +121,7 @@ class MoviePlayView: UIView {
             duration = currentItem.asset.duration
         }
         videoTimeObserver = player.addPeriodicTimeObserver(
-            forInterval: CMTimeMake(150, 600),
+            forInterval: CMTimeMake(value: 150, timescale: 600),
             queue: DispatchQueue.main) {
                 (_) -> Void in
                 let currentTime = player.currentTime()

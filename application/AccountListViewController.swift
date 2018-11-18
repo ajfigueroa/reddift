@@ -44,7 +44,7 @@ class AccountListViewController: UITableViewController {
         do {
             let authorizationURL = try OAuth2Authorizer.sharedInstance.challengeWithAllScopes()
             if #available (iOS 10.0, *) {
-                UIApplication.shared.open(authorizationURL, options: [:], completionHandler: nil)
+                UIApplication.shared.open(authorizationURL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             } else {
                 UIApplication.shared.openURL(authorizationURL)
             }
@@ -114,7 +114,7 @@ class AccountListViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if names.indices ~= indexPath.row {
                 
@@ -148,4 +148,9 @@ class AccountListViewController: UITableViewController {
         }
     }
 
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

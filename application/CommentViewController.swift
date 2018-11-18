@@ -351,13 +351,13 @@ class CommentViewController: UITableViewController, UIViewControllerPreviewingDe
 
 extension CommentViewController {
     func textView(_ textView: UZTextView, didLongTapLinkAttribute value: Any?) {
-        if let dict = value as? [String: Any], let url = dict[NSAttributedStringKey.link.rawValue] as? URL {
+        if let dict = value as? [String: Any], let url = dict[NSAttributedString.Key.link.rawValue] as? URL {
             print(url)
         }
     }
     
     func textView(_ textView: UZTextView, didClickLinkAttribute value: Any?) {
-        if let dict = value as? [String: Any], let url = dict[NSAttributedStringKey.link.rawValue] as? URL {
+        if let dict = value as? [String: Any], let url = dict[NSAttributedString.Key.link.rawValue] as? URL {
             print(url)
         }
     }

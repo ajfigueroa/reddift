@@ -167,7 +167,7 @@ class FrontViewController: UITableViewController, UIViewControllerPreviewingDele
         if searchController.view.superview == self.navigationController?.view {
             searchController.close(sender: self)
             searchControllerViewBottomSpaceConstraint = nil
-            searchController.removeFromParentViewController()
+            searchController.removeFromParent()
         }
     }
     
@@ -369,8 +369,8 @@ class FrontViewController: UITableViewController, UIViewControllerPreviewingDele
         
         registerForPreviewing(with: self, sourceView: self.view)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(FrontViewController.keyboardWillChangeFrame(notification:)), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(FrontViewController.keyboardWillChangeFrame(notification:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FrontViewController.keyboardWillChangeFrame(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(FrontViewController.keyboardWillChangeFrame(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     // MARK: - UIViewControllerPreviewingDelegate
@@ -492,7 +492,7 @@ class FrontViewController: UITableViewController, UIViewControllerPreviewingDele
     
     @objc func keyboardWillChangeFrame(notification: Notification) {
         if let userInfo = notification.userInfo {
-            if let rect = userInfo[UIKeyboardFrameEndUserInfoKey] as? CGRect {
+            if let rect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
                 print(rect)
                 if let searchControllerViewBottomSpaceConstraint = self.searchControllerViewBottomSpaceConstraint {
                     searchControllerViewBottomSpaceConstraint.constant = 667 - rect.origin.y
@@ -511,7 +511,7 @@ class FrontViewController: UITableViewController, UIViewControllerPreviewingDele
         
         if let navigationController = self.navigationController {
             
-            navigationController.addChildViewController(searchController)
+            navigationController.addChild(searchController)
             
             navigationController.view.addSubview(searchController.view)
             
@@ -523,10 +523,10 @@ class FrontViewController: UITableViewController, UIViewControllerPreviewingDele
             ]
             
             navigationController.view.addConstraints(
-                NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutFormatOptions(), metrics: [:], views: views)
+                NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutConstraint.FormatOptions(), metrics: [:], views: views)
             )
             
-            navigationController.view.bringSubview(toFront: navigationController.navigationBar)
+            navigationController.view.bringSubviewToFront(navigationController.navigationBar)
             let constraint1 = NSLayoutConstraint(item: navigationController.view, attribute: .top, relatedBy: .equal, toItem: searchController.view, attribute: .top, multiplier: 1, constant: -64)
             let constraint2 = NSLayoutConstraint(item: navigationController.view, attribute: .bottom, relatedBy: .equal, toItem: searchController.view, attribute: .bottom, multiplier: 1, constant: 100)
             

@@ -59,7 +59,7 @@ class CommentThumbnailView: UIView, ImageDownloadable {
         for i in 0 ..< numberOfRows {
             var temp: [UIImageView] = []
             for _ in 0 ..< CommentThumbnailView.numberOfColumns {
-                let ac = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+                let ac = UIActivityIndicatorView(style: .gray)
                 let iv = UIImageView(frame: CGRect.zero)
                 iv.clipsToBounds = true
                 iv.image = UIImage(named: "account")
