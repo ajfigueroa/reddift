@@ -253,8 +253,12 @@ extension Session {
     - returns: Data task which requests search to reddit.com.
      */
     @discardableResult
-    public func getUserRelatedSubreddit(_ mine: SubredditsMineWhere, paginator: Paginator, completion: @escaping (Result<Listing>) -> Void) throws -> URLSessionDataTask {
-        guard let request = URLRequest.requestForOAuth(with: baseURL, path: mine.path, parameter: paginator.parameterDictionary, method: "GET", token: token)
+    public func getUserRelatedSubreddit(_ mine: SubredditsMineWhere, paginator: Paginator, additionalParameters: [String: String] = [:], completion: @escaping (Result<Listing>) -> Void) throws -> URLSessionDataTask {
+        var parameters: [String: String] = paginator.parameterDictionary
+        additionalParameters.forEach { (key, value) in
+            parameters[key] = value
+        }
+        guard let request = URLRequest.requestForOAuth(with: baseURL, path: mine.path, parameter: parameters, method: "GET", token: token)
             else { throw ReddiftError.canNotCreateURLRequest as NSError }
         let closure = {(data: Data?, response: URLResponse?, error: NSError?) -> Result<Listing> in
             return Result(from: Response(data: data, urlResponse: response), optional: error)
