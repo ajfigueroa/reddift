@@ -220,6 +220,7 @@ public enum SubredditsMineWhere {
 	case contributor
 	case moderator
 	case subscriber
+    case mine
 	
 	public var path: String {
 		switch self {
@@ -229,6 +230,8 @@ public enum SubredditsMineWhere {
 			return "/subreddits/mine/moderator"
 		case .subscriber:
 			return "/subreddits/mine/subscriber"
+        case .mine:
+            return "/reddits/mine"
 		}
 	}
 }
