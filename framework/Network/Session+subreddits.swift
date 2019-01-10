@@ -195,14 +195,14 @@ extension Session {
     
     /**
     Subscribe to or unsubscribe from a subreddit. The user must have access to the subreddit to be able to subscribe to it.
-    - parameter subreddit: Subreddit obect to be subscribed/unsubscribed
+    - parameter subredditName: The name of the Subreddit to subscribe to
     - parameter subscribe: If you want to subscribe it, set true.
     - parameter completion: The completion handler to call when the load request is complete.
     - returns: Data task which requests search to reddit.com.
      */
     @discardableResult
-    public func setSubscribeSubreddit(_ subreddit: Subreddit, subscribe: Bool, completion: @escaping (Result<JSONAny>) -> Void) throws -> URLSessionDataTask {
-        var parameter = ["sr": subreddit.name]
+    public func setSubscribeSubreddit(named subredditName: String, subscribe: Bool, completion: @escaping (Result<JSONAny>) -> Void) throws -> URLSessionDataTask {
+        var parameter = ["sr": subredditName]
         parameter["action"] = (subscribe) ? "sub" : "unsub"
         guard let request = URLRequest.requestForOAuth(with: baseURL, path: "/api/subscribe", parameter: parameter, method: "POST", token: token)
             else { throw ReddiftError.canNotCreateURLRequest as NSError }
